@@ -1,5 +1,6 @@
 <html>
 <head>
+  <script type="text/javascript" src="../lib/MochiKit/MochiKit.js"></script>
   <script src="../lib/OpenLayers.js"></script>
   <script type="text/javascript"><!--
     var map; 
@@ -28,7 +29,33 @@
     }
     function test_03_Control_PanZoom_control_events (t) {
         t.plan( 7 );
-        var evt = {which: 1}; // control expects left-click
+        /* 
+        
+            Adapted from: 
+            http://www.devdaily.com/java/jwarehouse/jforum/tests/selenium/javascript/htmlutils.js.shtml
+            License: Apache
+            Copyright: Copyright 2004 ThoughtWorks, Inc
+            
+        */
+        var triggerMouseEvent = function(element, eventType, canBubble) {
+            element = MochiKit.DOM.getElement(element);
+            canBubble = (typeof(canBubble) == 'undefined') ? true : canBubble;
+            if (element.fireEvent) {
+                var newEvt = document.createEventObject();
+                newEvt.clientX = 1;
+                newEvt.clientY = 1;
+                newEvt.button = 1;
+                element.fireEvent('on' + eventType, newEvt);
+            } else if (document.createEvent && (typeof(document.createEvent('MouseEvents').initMouseEvent) == 'function')) {
+                var evt = document.createEvent('MouseEvents');
+                evt.initMouseEvent(eventType, canBubble, true, // event, bubbles, cancelable
+                    document.defaultView, 1, // view, # of clicks
+                    1, 0, 0, 0, // screenX, screenY, clientX, clientY
+                    false, false, false, false, // ctrlKey, altKey, shiftKey, metaKey
+                    0, null); // buttonCode, relatedTarget
+                element.dispatchEvent(evt);
+            }
+        };
         map = new OpenLayers.Map('map');
         var layer = new OpenLayers.Layer.WMS("Test Layer", 
             "http://octo.metacarta.com/cgi-bin/mapserv?",
@@ -41,25 +68,25 @@
         var centerLL = new OpenLayers.LonLat(0,0); 
         map.setCenter(centerLL, 5);
 
-        control.buttons[0].onmousedown(evt);
+        triggerMouseEvent(control.buttons[0],'onmousedown');
         t.ok( map.getCenter().lat > centerLL.lat, "Pan up works correctly" );
 
-        control.buttons[1].onmousedown(evt);
+        triggerMouseEvent(control.buttons[1],'onmousedown');
         t.ok( map.getCenter().lon < centerLL.lon, "Pan left works correctly" );
 
-        control.buttons[2].onmousedown(evt);
+        triggerMouseEvent(control.buttons[2],'onmousedown');
         t.ok( map.getCenter().lon == centerLL.lon, "Pan right works correctly" );
 
-        control.buttons[3].onmousedown(evt);
+        triggerMouseEvent(control.buttons[3],'onmousedown');
         t.ok( map.getCenter().lat == centerLL.lat, "Pan down works correctly" );
 
-        control.buttons[4].onmousedown(evt);
+        triggerMouseEvent(control.buttons[4],'onmousedown');
         t.eq( map.getZoom(), 6, "zoomin works correctly" );
 
-        control.buttons[6].onmousedown(evt);
+        triggerMouseEvent(control.buttons[6],'onmousedown');
         t.eq( map.getZoom(), 5, "zoomout works correctly" );
 
-        control.buttons[5].onmousedown(evt);
+        triggerMouseEvent(control.buttons[5],'onmousedown');
         t.eq( map.getZoom(), 2, "zoomworld works correctly" );
 
     }

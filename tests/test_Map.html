@@ -1,11 +1,12 @@
 <html>
 <head>
+  <script type="text/javascript" src="../lib/MochiKit/MochiKit.js"></script>
   <script src="../lib/OpenLayers.js"></script>
   <script type="text/javascript"><!--
     var isMozilla = (navigator.userAgent.indexOf("compatible") == -1);
     var map; 
     function test_01_Map_constructor (t) {
-        t.plan( 9 );
+        t.plan( 8 );
         
         map = new OpenLayers.Map('map'); // no longer need to call $(), constructor does it
         var baseLayer = new OpenLayers.Layer.WMS("Test Layer", 
@@ -25,7 +26,7 @@
         }
         t.ok( map.layers instanceof Array, "map.layers is an Array" );
         t.ok( map.controls instanceof Array, "map.controls is an Array" );
-        t.ok( map.events instanceof OpenLayers.Events, "map.events is an OpenLayers.Events" );
+        //t.ok( map.events instanceof OpenLayers.Events, "map.events is an OpenLayers.Events" );
         t.ok( map.getMaxExtent() instanceof OpenLayers.Bounds, "map.maxExtent is an OpenLayers.Bounds" );
         t.ok( map.getMaxZoomLevel() > 0, "map.maxZoomLevel is set" );
     }
@@ -99,13 +100,15 @@
             "http://octo.metacarta.com/cgi-bin/mapserv?",
             {map: "/mapdata/vmap_wms.map", layers: "basic"});
         map.addLayer(baseLayer);
-        map.events.register("zoomend", {count: 0}, function() { 
-            this.count++; 
-            t.ok(true, "zoomend event was triggered " + this.count + " times");
+        var sig_id = MochiKit.Signal.connect(map,"zoomend",{count:0},
+            function() { 
+                this.count++; 
+                t.ok(true, "zoomend event was triggered " + this.count + " times");
             });
         map.setCenter(new OpenLayers.LonLat(2, 1), 0);
         map.zoomIn();
         map.zoomOut();
+        MochiKit.Signal.disconnect(sig_id);
     }
     
     function test_07_Map_add_remove_popup (t) {

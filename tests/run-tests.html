@@ -79,6 +79,7 @@ body { height: 98%; font: normal normal 10pt sans-serif }
 #record_select { width: 88%; }
 #record_input { width: 53%; }
 </style>
+<script type="text/javascript" src="../lib/MochiKit/MochiKit.js"></script>
 <script type="text/javascript">
 <!--
 if( typeof( Test )=="undefined" ) {
@@ -775,7 +776,7 @@ Test.AnotherWay._set_iframe_location=function( iframe, loc, outside_path_correct
 			loc=loc.substring( outside_path_correction.length+1 );
 		}
 	}
-	if( iframe.location!=null ) {
+	if( iframe.location ) {
 		iframe.location.replace( loc );
 	}else {
 		iframe.src=loc;

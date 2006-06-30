@@ -7,10 +7,13 @@
             border: 1px solid black;
         }
     </style>
+    <script type="text/javascript" src="../lib/MochiKit/MochiKit.js"></script>
     <script src="../lib/OpenLayers.js"></script>
     <script type="text/javascript">
         <!--
-        function init(){
+        MochiKit.Signal.connect(window, 'onload',
+        function(){
+        	//MochiKit.LoggingPane.createLoggingPane(true);
             var map = new OpenLayers.Map('map');
 
             var ol_wms = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
@@ -26,6 +29,7 @@
                          "prov_bound,fedlimit,rail,road,popplace",
                  transparent: "true", format: "image/png" });
 
+            ol_wms.setVisibility(true);
             jpl_wms.setVisibility(false);
             dm_wms.setVisibility(false);
 
@@ -34,10 +38,11 @@
             // map.setCenter(new OpenLayers.LonLat(0, 0), 0);
             map.zoomToMaxExtent();
         }
+        );
         // -->
     </script>
   </head>
-  <body onload="init()">
+  <body>
     <h1>OpenLayers Example</h1>
     <div id="map"></div>
   </body>

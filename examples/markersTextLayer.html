@@ -1,5 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <script type="text/javascript" src="../lib/MochiKit/MochiKit.js"></script>
     <meta http-equiv="imagetoolbar" content="no"> <!--ie image gizmo OFF!-->
     <style type="text/css">
         #map {
@@ -14,6 +15,7 @@
         var map, layer;
 
         function init(){
+        	MochiKit.LoggingPane.createLoggingPane(true);
             map = new OpenLayers.Map('map');
             layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
                 "http://labs.metacarta.com/wms/vmap0", {layers: 'basic'} );

@@ -7,10 +7,12 @@
             border: 1px solid black;
         }
     </style>
+    <script type="text/javascript" src="../lib/MochiKit/MochiKit.js"></script>
     <script src="../lib/OpenLayers.js"></script>
     <script type="text/javascript">
         <!--
         function init(){
+        	MochiKit.LoggingPane.createLoggingPane(true);
             var map = new OpenLayers.Map('map');
 
             var ol_wms = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
