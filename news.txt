@@ -1,3 +1,8 @@
+OpenLayers 2.6:
+ r6945
+ Released 04/15/08 
+ http://trac.openlayers.org/wiki/Release/2.6/Notes
+
 OpenLayers 2.5:
  r4899
  Released 10/09/07 
